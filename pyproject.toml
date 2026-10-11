@@ -20,3 +20,6 @@ build-backend = "uv_build"
 dev = [
     "pytest>=9.1.1",
 ]
+
+[tool.uv]
+required-version = ">=0.13.0"

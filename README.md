@@ -14,6 +14,19 @@ uv run climbing-buddy-lab  # 运行入口命令
 uv run pytest              # 运行测试
 ```
 
+## 配置
+
+配置只通过环境变量传入，代码里不写死。变量清单和说明见 `.env.example`。
+
+```powershell
+Copy-Item .env.example .env                  # 本地配置文件，已被 .gitignore 忽略
+uv run --env-file .env climbing-buddy-lab    # 由 uv 读取 .env，注入环境变量后再运行
+```
+
+| 变量 | 作用 | 默认值 |
+| --- | --- | --- |
+| `CLIMBING_BUDDY_DATA_FILE` | 训练记录 JSON 文件路径 | `data/records.json` |
+
 ## 目录结构
 
 ```text

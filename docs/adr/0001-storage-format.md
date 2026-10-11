@@ -32,3 +32,12 @@
   - 应对：文件顶层带一个 schema_version 字段；存储层与核心层分离，换格式只影响存储层。
 - 约束：数据文件不提交到仓库，在 .gitignore 中排除。
 - 复审时机：正式版 P3 设计时重新评估；如果记录量或并发写入需求明显增长，再考虑 SQLite。
+
+## 核实记录（U04，2026-10-10）
+不改上面的决定，只补充实现时核实的事实：
+- Python 3.14 文档对 `os.replace` 的原子性表述是 “If successful, the renaming will be an atomic operation (this is a POSIX requirement)”，只对 POSIX 作出要求。
+- CPython 在 Windows 上用 `MoveFileExW(..., MOVEFILE_REPLACE_EXISTING)` 实现 `os.replace`，不允许跨卷复制；微软文档没有对该函数作原子性承诺。
+- 结论：Windows 上的原子性没有官方保证。同一 NTFS 卷内的替换在实践中通常可视为原子，lab 阶段接受这一风险。
+- 实现措施：临时文件与目标放在同一目录；写完先 `fsync` 再替换；失败时删除临时文件（`src/climbing_buddy_lab/storage.py`）。
+- 新增已知风险：目标文件被其他程序占用（编辑器、杀毒软件、同步盘）时替换可能抛 `PermissionError`，记为技术债，P3 设计时一并复审。
+- 来源：https://docs.python.org/3.14/library/os.html#os.replace ；https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-movefileexw

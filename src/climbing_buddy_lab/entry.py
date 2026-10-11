@@ -10,9 +10,9 @@ from climbing_buddy_lab.core import send_rate
 
 
 def main() -> None:
-    console = Console()                                # rich 的输出对象，负责颜色和宽字符对齐
-    table = Table(title="攀岩训练伙伴 · 原型 v0")      # 带标题的表格
+    console = Console()  # rich 的输出对象，负责颜色和宽字符对齐
+    table = Table(title="攀岩训练伙伴 · 原型 v0")  # 带标题的表格
     table.add_column("指标")
-    table.add_column("数值", justify="right")          # 数字列右对齐
+    table.add_column("数值", justify="right")  # 数字列右对齐
     table.add_row("示例完攀率", f"{send_rate(3, 5):.1%}")
     console.print(table)

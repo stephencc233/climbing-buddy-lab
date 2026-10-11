@@ -21,7 +21,20 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "pytest>=9.1.1",
+    "ruff>=0.17.0",
 ]
 
 [tool.uv]
 required-version = ">=0.13.0"
+
+[tool.ruff]
+# target-version 不写：Ruff 从 [project].requires-python（>=3.14）推断，版本只在一处维护
+# line-length 不写：默认 88（与 Black 一致）
+
+[tool.ruff.lint]
+# 不写 select：采用 Ruff 默认规则集（0.17.0 为 407 条），决定见 B9《Ruff 配置说明》。
+# Ruff 的确切版本由 uv.lock 锁定；升级 Ruff 单独提 PR（uv lock --upgrade-package ruff），
+# 新版本默认规则的变化会在那个 PR 的检查结果里暴露，逐条处理后再合并。
+
+[tool.ruff.format]
+line-ending = "lf"  # 与 .editorconfig、.gitattributes 一致

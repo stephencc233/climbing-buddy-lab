@@ -1,0 +1,17 @@
+# EditorConfig：编辑器层面的统一规则（编码、换行、缩进、末尾空行），https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{json,yml,yaml}]
+indent_size = 2
+
+[*.md]
+# Markdown 行尾两个空格表示换行，不能自动删
+trim_trailing_whitespace = false

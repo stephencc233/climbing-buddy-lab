@@ -1,0 +1,9 @@
+{
+  // 推荐扩展：打开仓库时 VS Code 会提示安装。只放“这个项目需要的”，个人偏好的扩展不放
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "charliermarsh.ruff",
+    "editorconfig.editorconfig"
+  ]
+}

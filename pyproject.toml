@@ -1,0 +1,22 @@
+[project]
+name = "climbing-buddy-lab"
+version = "0.1.0"
+description = "攀岩训练伙伴（原型）：记录室内攀岩训练并按周统计完攀率"
+readme = "README.md"
+authors = [
+    { name = "stephen", email = "53896956+stephencc233@users.noreply.github.com" }
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[project.scripts]
+climbing-buddy-lab = "climbing_buddy_lab.entry:main"
+
+[build-system]
+requires = ["uv_build>=0.13.0,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]

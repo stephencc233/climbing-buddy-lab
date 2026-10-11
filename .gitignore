@@ -12,3 +12,6 @@ __pycache__/
 dist/
 build/
 *.egg-info/
+
+# 本地训练数据（ADR 0001：个人数据不进仓库）
+data/

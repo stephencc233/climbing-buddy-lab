@@ -8,6 +8,11 @@ import pytest
 
 from climbing_buddy_lab import entry
 
+# 期望值写字面量，不引用 entry 模块里的常量：变量名和默认路径是对外公开的约定
+# （.env.example、README）。被测代码把它们改错时，期望值不能跟着一起变
+ENV_NAME = "CLIMBING_BUDDY_DATA_FILE"
+DEFAULT_PATH = Path("data/records.json")
+
 
 @pytest.mark.parametrize(
     ("rate", "dimension", "shown"),
@@ -25,7 +30,7 @@ def test_format_send_rate(rate: float | None, dimension: str, shown: str) -> Non
 
 
 def test_data_file_reads_env_var(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv(entry.DATA_FILE_ENV, "custom/records.json")
+    monkeypatch.setenv(ENV_NAME, "custom/records.json")
     assert entry.data_file() == Path("custom/records.json")
 
 
@@ -34,10 +39,10 @@ def test_data_file_falls_back_to_default(
     monkeypatch: pytest.MonkeyPatch, value: str | None
 ) -> None:
     # 不管运行测试的进程里有没有 .env 注入的值（测试面板会注入），都先清掉再设
-    monkeypatch.delenv(entry.DATA_FILE_ENV, raising=False)
+    monkeypatch.delenv(ENV_NAME, raising=False)
     if value is not None:
-        monkeypatch.setenv(entry.DATA_FILE_ENV, value)
-    assert entry.data_file() == Path(entry.DEFAULT_DATA_FILE)
+        monkeypatch.setenv(ENV_NAME, value)
+    assert entry.data_file() == DEFAULT_PATH
 
 
 def test_main_shows_record_count(
@@ -47,7 +52,7 @@ def test_main_shows_record_count(
     data = tmp_path / "records.json"
     payload = {"schema_version": 1, "records": [{"grade": "V4"}, {"grade": "V5"}]}
     data.write_text(json.dumps(payload), encoding="utf-8")
-    monkeypatch.setenv(entry.DATA_FILE_ENV, str(data))
+    monkeypatch.setenv(ENV_NAME, str(data))
 
     entry.main()
 

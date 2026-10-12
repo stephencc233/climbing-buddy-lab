@@ -68,11 +68,21 @@ def test_save_replaces_whole_file_and_leaves_no_temp_file(
     assert [p.name for p in records_file.parent.iterdir()] == ["records.json"]
 
 
-def test_load_rejects_unknown_schema_version(records_file: Path) -> None:
+@pytest.mark.parametrize(
+    "payload",
+    [
+        pytest.param({"records": []}, id="missing"),
+        pytest.param({"schema_version": 0, "records": []}, id="older-0"),
+        pytest.param({"schema_version": 999, "records": []}, id="newer-999"),
+        pytest.param({"schema_version": "1", "records": []}, id="string-1"),
+    ],
+)
+def test_load_rejects_unsupported_schema_version(
+    records_file: Path, payload: dict[str, Any]
+) -> None:
+    # 只认当前版本：缺字段、旧版本、新版本、类型不对都要报错，而不是静默读入
     records_file.parent.mkdir(parents=True)
-    records_file.write_text(
-        json.dumps({"schema_version": 999, "records": []}), encoding="utf-8"
-    )
+    records_file.write_text(json.dumps(payload), encoding="utf-8")
     with pytest.raises(ValueError, match="schema_version"):
         load_records(records_file)
 

@@ -35,6 +35,28 @@
       "problemMatcher": []
     },
     {
+      "label": "检查：pyright",
+      "type": "process",
+      "command": "uv",
+      // 范围和模式由 pyproject.toml 的 [tool.pyright] 决定，与编辑器里的 Pylance 同一份配置
+      "args": ["run", "pyright"],
+      "group": "test",
+      "presentation": { "panel": "dedicated", "clear": true },
+      // pyright 输出形如“  D:\...\core.py:12:5 - error: 信息 (规则名)”，解析进“问题”面板
+      "problemMatcher": {
+        "owner": "pyright",
+        "fileLocation": "absolute",
+        "pattern": {
+          "regexp": "^\\s+(.+):(\\d+):(\\d+) - (error|warning|information): (.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
+    },
+    {
       "label": "检查：pytest",
       "type": "process",
       "command": "uv",
@@ -54,9 +76,10 @@
       "problemMatcher": []
     },
     {
-      // 提交前三项检查，按顺序执行；设为默认测试任务，Run Test Task 时直接运行
+      // 全量检查，按顺序执行、失败即停；设为默认测试任务，Run Test Task 时直接运行。
+      // pre-commit 只查本次提交涉及的文件、也不跑 pytest，推送前用这个任务做一次全量检查
       "label": "检查：全部（提交前）",
-      "dependsOn": ["检查：ruff check", "检查：ruff format --check", "检查：pytest"],
+      "dependsOn": ["检查：ruff check", "检查：ruff format --check", "检查：pyright", "检查：pytest"],
       "dependsOrder": "sequence",
       "group": { "kind": "test", "isDefault": true },
       "problemMatcher": []

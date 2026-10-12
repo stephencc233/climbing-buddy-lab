@@ -1,0 +1,57 @@
+# pre-commit：git commit 时自动运行下面的检查，任何一项失败就拒绝本次提交。
+# 启用（每个克隆做一次）：uv sync 后执行 uv run pre-commit install
+# 说明见 Obsidian B11《pre-commit 使用指南》
+minimum_pre_commit_version: "4.4.0" # language: unsupported 从 4.4.0 起才有
+
+repos:
+  # 1) 通用检查：pre-commit 官方钩子仓库。远程仓库按 rev 锁定版本，
+  #    首次运行时克隆到用户缓存目录并建独立环境，之后复用
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-merge-conflict # 残留 <<<<<<< / ======= / >>>>>>> 冲突标记
+      - id: check-toml # pyproject.toml 等 TOML 语法
+      - id: check-yaml # 本文件等 YAML 语法
+      - id: check-added-large-files # 新增文件超过 500 KB 时拦下
+      - id: detect-private-key # 出现私钥头（BEGIN ... PRIVATE KEY）
+      - id: no-commit-to-branch # 禁止直接在 main 上提交：改动走分支 → PR
+        args: [--branch, main]
+
+  # 2) 项目工具：本地钩子，直接用 .venv 里由 uv.lock 锁定的版本，
+  #    与编辑器、tasks.json、以后的 CI 是同一个版本，不在这里另记一份版本号
+  - repo: local
+    hooks:
+      - id: uv-lock-check
+        name: uv lock --check
+        # 改了 pyproject.toml 的依赖却忘了 uv lock 时拦下；只在这两个文件有改动时运行
+        entry: uv lock --check
+        language: unsupported # 不建独立环境，直接运行本机命令（旧名 system）
+        files: ^(pyproject\.toml|uv\.lock)$
+        pass_filenames: false
+
+      - id: ruff-check
+        name: ruff check
+        # --locked：uv.lock 与 pyproject.toml 不一致时报错，不会在提交过程中偷偷改锁文件
+        # --force-exclude：pre-commit 把文件名逐个传进来，加上它 Ruff 才继续遵守排除规则
+        # 不加 --fix：和“保存时不自动修复 lint”一致，先看到问题再手动改
+        entry: uv run --locked ruff check --force-exclude
+        language: unsupported
+        types_or: [python, pyi]
+        require_serial: true # Ruff 自己会并行，不让 pre-commit 再拆批并发
+
+      - id: ruff-format
+        name: ruff format
+        # 直接改写文件；改了就算失败，检查改动后重新 git add 再提交
+        entry: uv run --locked ruff format --force-exclude
+        language: unsupported
+        types_or: [python, pyi]
+        require_serial: true
+
+      - id: pyright
+        name: pyright
+        # 类型错误会跨文件传播（改了 core.py 的签名，出错的是没改动的 entry.py），
+        # 所以不传文件名，按 [tool.pyright] 的范围检查整个项目
+        entry: uv run --locked pyright
+        language: unsupported
+        types_or: [python, pyi]
+        pass_filenames: false

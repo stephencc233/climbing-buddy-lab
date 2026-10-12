@@ -9,6 +9,9 @@ __pycache__/
 # 测试与打包产物
 .pytest_cache/
 .coverage
+.coverage.*
+htmlcov/
+coverage.xml
 dist/
 build/
 *.egg-info/

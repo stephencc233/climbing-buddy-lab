@@ -45,3 +45,13 @@
   - 核心层所有“比例”类统计沿用同一约定：分母为 0 返回 `None`，非法计数抛 `ValueError`。
   - 核心层不返回任何展示用文字。
 - 复审时机：P3 设计正式版 `climbing-buddy` 的统计接口时（考虑方案 4）。
+
+## 核实记录
+
+### 2026-10-12（U08）：理由 4“由类型检查提醒调用方处理 None”的实测
+
+- 实测前：仓库没有配置类型检查模式，Pylance 默认 `off`，编辑器**不会**提示漏判 `None`，理由 4 当时并不成立。
+- 已在 `pyproject.toml` 加 `[tool.pyright]`（`typeCheckingMode = "standard"`），Pylance 与命令行 pyright（dev 组，提交前钩子与任务都会运行）共用这一配置。
+- 能查出的漏判（pyright 1.1.414，basic 与 standard 结果相同）：算术、比较、`round()`、传给 `float` 参数、作为 `-> float` 的返回值、调用 `float` 的方法。
+- **查不出**：`f"{rate:.1%}"` 和 `format(rate, ".1%")`。`None` 继承的 `object.__format__` 接受任意格式字符串，类型层面看不出问题，运行时才抛 `TypeError: unsupported format string passed to NoneType.__format__`（mypy 2.4.0 只能查出 `"{:.1%}".format(rate)` 这种字面量写法，ty 0.0.86 也查不出）。
+- 结论：理由 4 部分成立。格式化这一类由 `format_send_rate` 的测试和“格式化集中在入口层一个函数里”的约定兜底，后果一节的应对措施保持不变。

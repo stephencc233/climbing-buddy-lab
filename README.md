@@ -14,6 +14,17 @@ uv run climbing-buddy-lab  # 运行入口命令
 uv run pytest              # 运行测试
 ```
 
+## 参与开发
+
+克隆后先启用提交前检查（每个克隆做一次）：
+
+```powershell
+uv run pre-commit install         # 之后每次 git commit 自动运行 Ruff、pyright 等检查，配置见 .pre-commit-config.yaml
+uv run pre-commit run --all-files # 手动对全部文件运行一遍
+```
+
+推送前用 VS Code 任务“检查：全部（提交前）”做一次全量检查（ruff check、ruff format --check、pyright、pytest）。
+
 ## 配置
 
 配置只通过环境变量传入，代码里不写死。变量清单和说明见 `.env.example`。

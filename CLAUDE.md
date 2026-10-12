@@ -10,7 +10,8 @@
 
 - 这是学习仓库：修改前先说明计划，等我确认后再动手；一次只改一件事，不要顺手重构。
 - 改动走分支 → PR，不直接提交到 main；PR 用 merge commit 合并。
-- 提交前三项检查都要通过：`uv run ruff check`、`uv run ruff format --check`、`uv run pytest`。
+- 提交前四项检查都要通过：`uv run ruff check`、`uv run ruff format --check`、`uv run pyright`、`uv run pytest`。
+- `git commit` 会触发 pre-commit（`.pre-commit-config.yaml`）；钩子失败时修正后重新提交，不用 `--no-verify` 绕过。
 - 公开仓库：不读取、不提交 `.env` 和 `data/`，任何文件里都不写密钥。
 
 ## 常用命令
@@ -27,6 +28,9 @@ uv run pytest --cov --cov-report=term-missing   # 测试 + 覆盖率（范围见
 uv run ruff check                           # lint（Ruff 默认规则集，不写 select）
 uv run ruff format                          # 格式化（改写文件）
 uv run ruff format --check                  # 只检查不改（验收和 CI 用这条）
+uv run pyright                              # 类型检查（standard 模式，范围见 [tool.pyright]）
+uv run pre-commit install                   # 启用提交前钩子（每个克隆一次）
+uv run pre-commit run --all-files           # 对全部文件运行钩子
 ```
 
 ## 架构
@@ -50,5 +54,6 @@ uv run ruff format --check                  # 只检查不改（验收和 CI 用
 
 - 依赖只能用 `uv add` / `uv remove` 修改，禁止 `uv pip install`；不执行 `uv self update`、`uv python install`（由 Scoop 管理）。
 - `pyproject.toml`、`uv.lock`、`.python-version` 必须一起提交；`uv.lock` 不手改，冲突时任取一边再 `uv lock`。
-- 升级 uv 小版本时，同一 PR 内同步改 `uv_build` 上限并 `uv lock`；升级 Ruff 单独提 PR（`uv lock --upgrade-package ruff`）。
+- 升级 uv 小版本时，同一 PR 内同步改 `uv_build` 上限并 `uv lock`；升级 Ruff、pyright 各自单独提 PR（`uv lock --upgrade-package <包名>`）。
+- pre-commit 里的 Ruff、pyright 是本地钩子（`uv run --locked`），版本只由 `uv.lock` 决定，不要改成远程钩子另记版本。
 - 换行统一 LF（`.gitattributes`、`.editorconfig`、Ruff format 一致），`.bat` / `.cmd` 除外。

@@ -1,0 +1,55 @@
+{
+  // 一键任务：命令面板 → Tasks: Run Task（或 Run Test Task）。说明见 B10《调试与测试指南》
+  // type 用 "process"：直接启动 uv，不经过 PowerShell 解析，避免引号和转义问题
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "检查：ruff check",
+      "type": "process",
+      "command": "uv",
+      // concise：每个问题一行“文件:行:列: 规则 信息”，方便下面的 problemMatcher 解析
+      "args": ["run", "ruff", "check", "--output-format", "concise"],
+      "group": "test",
+      "presentation": { "panel": "dedicated", "clear": true },
+      // 把 Ruff 输出解析进“问题”面板，点击可跳到对应行
+      "problemMatcher": {
+        "owner": "ruff",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.+?):(\\d+):(\\d+): (\\S+) (?:\\[\\*\\] )?(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "code": 4,
+          "message": 5
+        }
+      }
+    },
+    {
+      "label": "检查：ruff format --check",
+      "type": "process",
+      "command": "uv",
+      "args": ["run", "ruff", "format", "--check"],
+      "group": "test",
+      "presentation": { "panel": "dedicated", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "检查：pytest",
+      "type": "process",
+      "command": "uv",
+      "args": ["run", "pytest", "-q"],
+      "group": "test",
+      "presentation": { "panel": "dedicated", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      // 提交前三项检查，按顺序执行；设为默认测试任务，Run Test Task 时直接运行
+      "label": "检查：全部（提交前）",
+      "dependsOn": ["检查：ruff check", "检查：ruff format --check", "检查：pytest"],
+      "dependsOrder": "sequence",
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": []
+    }
+  ]
+}

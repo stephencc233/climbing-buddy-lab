@@ -44,6 +44,16 @@
       "problemMatcher": []
     },
     {
+      // 覆盖率报告：只看报告，不设门槛，所以不放进“检查：全部”。范围和分支覆盖见 pyproject.toml 的 [tool.coverage]
+      "label": "报告：覆盖率",
+      "type": "process",
+      "command": "uv",
+      "args": ["run", "pytest", "--cov", "--cov-report=term-missing", "--cov-report=html"],
+      "group": "test",
+      "presentation": { "panel": "dedicated", "clear": true },
+      "problemMatcher": []
+    },
+    {
       // 提交前三项检查，按顺序执行；设为默认测试任务，Run Test Task 时直接运行
       "label": "检查：全部（提交前）",
       "dependsOn": ["检查：ruff check", "检查：ruff format --check", "检查：pytest"],

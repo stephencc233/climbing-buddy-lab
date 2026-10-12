@@ -23,6 +23,7 @@ uv run climbing-buddy-lab                   # 运行入口
 uv run --env-file .env climbing-buddy-lab   # 读取本地 .env 后运行（先 Copy-Item .env.example .env）
 uv run pytest                               # 全部测试
 uv run pytest tests/test_core.py::test_send_rate_counts_routes   # 单个测试
+uv run pytest --cov --cov-report=term-missing   # 测试 + 覆盖率（范围见 [tool.coverage]，不设门槛）
 uv run ruff check                           # lint（Ruff 默认规则集，不写 select）
 uv run ruff format                          # 格式化（改写文件）
 uv run ruff format --check                  # 只检查不改（验收和 CI 用这条）
@@ -38,11 +39,11 @@ uv run ruff format --check                  # 只检查不改（验收和 CI 用
 
 配置只通过环境变量传入，不在代码中写死；新增变量要同步更新 `.env.example` 和 README 的变量表。
 
-已知问题：`send_rate` 在 `logged_routes == 0` 时抛 `ZeroDivisionError`，留到 M4 先写测试复现再修复，**不要顺手改掉**。
+核心层统计函数的约定（ADR 0003）：分母为 0 返回 `None`（“无数据”，不是 0%），负数或 `sent > logged` 等非法计数抛 `ValueError`；提示文字由入口层的 `format_send_rate` 生成。
 
 ## 需求与决策文档
 
-- `docs/requirements.md`：需求、术语约定和验收标准 AC*；测试注释中引用对应的 AC 编号（如 `# 对应 AC2.1`）。
+- `docs/requirements.md`：需求、术语约定和验收标准 AC*；测试注释或参数化 id 中引用对应的 AC 编号（如 `# 对应 AC2.1`、`id="AC2.1-3of4"`）。
 - `docs/adr/`：架构决策记录。改动涉及已有决策时先读相关 ADR；新的重要决策另写 ADR。
 
 ## 依赖与工具约束（ADR 0002）

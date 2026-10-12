@@ -21,6 +21,7 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
     "ruff>=0.17.0",
 ]
 
@@ -38,3 +39,16 @@ required-version = ">=0.13.0"
 
 [tool.ruff.format]
 line-ending = "lf"  # 与 .editorconfig、.gitattributes 一致
+
+[tool.pytest]
+# pytest 9.0 起支持的原生 TOML 表（旧写法 [tool.pytest.ini_options] 的值是 INI 字符串）
+minversion = "9.0"
+testpaths = ["tests"]                 # 不带路径运行 pytest 时，只在 tests/ 下收集
+addopts = ["-ra", "--strict-markers"] # -ra：末尾汇总非通过的结果；拼错的标记（如 parametrise）直接报错
+
+[tool.coverage.run]
+source = ["climbing_buddy_lab"]  # 只统计自己的包（按导入名找到 src/ 下的源码），从没被导入的文件也会列出
+branch = true                    # 分支覆盖：if 的“是 / 否”两条路都走过才算覆盖
+
+[tool.coverage.report]
+show_missing = true              # 列出没执行到的行号

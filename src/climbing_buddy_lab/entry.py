@@ -23,6 +23,16 @@ def data_file() -> Path:
     return Path(os.environ.get(DATA_FILE_ENV) or DEFAULT_DATA_FILE)
 
 
+def format_send_rate(rate: float | None, dimension: str) -> str:
+    """完攀率的显示文字：百分比保留 1 位小数；无数据时显示提示文字（AC3.2）。
+
+    dimension 是筛选维度：“难度”“类型”或“角度”。
+    """
+    if rate is None:
+        return f"本周未进行该{dimension}攀爬"
+    return f"{rate:.1%}"
+
+
 def main() -> None:
     path = data_file()
     records = load_records(path)
@@ -33,5 +43,5 @@ def main() -> None:
     table.add_column("数值", justify="right")  # 数字列右对齐
     table.add_row("数据文件", str(path))
     table.add_row("记录条数", str(len(records)))
-    table.add_row("示例完攀率", f"{send_rate(3, 5):.1%}")
+    table.add_row("示例完攀率", format_send_rate(send_rate(3, 5), "难度"))
     console.print(table)

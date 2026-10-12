@@ -15,5 +15,11 @@
   // 用 .venv 里由 uv.lock 锁定的 ruff，而不是扩展自带的那份，保证编辑器和命令行结果一致
   "ruff.importStrategy": "fromEnvironment",
   // 规则以 pyproject.toml 为准，个人的 VS Code ruff.* 设置不能覆盖项目配置
-  "ruff.configurationPreference": "filesystemFirst"
+  "ruff.configurationPreference": "filesystemFirst",
+
+  // 测试面板（烧杯图标）：用 pytest，关掉 unittest，两个框架同时开会重复发现。
+  // 参数留空：收集范围和选项统一由 pyproject.toml 的 [tool.pytest] 决定，面板、终端、任务口径一致
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": []
 }

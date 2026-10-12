@@ -59,4 +59,4 @@ show_missing = true              # 列出没执行到的行号
 # 类型检查配置：VS Code 里的 Pylance 和命令行 pyright 都读这一节，口径一致。
 # 写在项目配置里后，个人 VS Code 设置里的 python.analysis.typeCheckingMode 不再生效（项目优先）
 include = ["src", "tests"]      # 只查项目代码；scratch/ 等本地目录不在命令行检查范围内
-typeCheckingMode = "standard"   # pyright 的默认档；Pylance 默认是 off（什么都不查）。basic 与 standard 的差别见 B10 类型检查一节
+typeCheckingMode = "standard"   # pyright 的默认档；Pylance 默认是 off（什么都不查）。basic 与 standard 的差别见 B11

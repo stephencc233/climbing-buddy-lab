@@ -19,7 +19,7 @@ uv run pytest              # 运行测试
 克隆后先启用提交前检查（每个克隆做一次）：
 
 ```powershell
-uv run pre-commit install         # 之后每次 git commit 自动运行 Ruff、pyright 等检查，配置见 .pre-commit-config.yaml
+uv run pre-commit install         # 之后 git commit 时自动运行检查（Ruff 查暂存的 .py 文件，pyright 查整个项目），配置见 .pre-commit-config.yaml
 uv run pre-commit run --all-files # 手动对全部文件运行一遍
 ```
 

@@ -17,6 +17,10 @@
   // 规则以 pyproject.toml 为准，个人的 VS Code ruff.* 设置不能覆盖项目配置
   "ruff.configurationPreference": "filesystemFirst",
 
+  // Pylance 检查整个工作区（范围按 pyproject.toml 的 [tool.pyright].include），而不只是打开的文件：
+  // 改了 core.py 的签名时，没打开的 entry.py 里的错误也会出现在“问题”面板
+  "python.analysis.diagnosticMode": "workspace",
+
   // 测试面板（烧杯图标）：用 pytest，关掉 unittest，两个框架同时开会重复发现。
   // 参数留空：收集范围和选项统一由 pyproject.toml 的 [tool.pytest] 决定，面板、终端、任务口径一致
   "python.testing.pytestEnabled": true,

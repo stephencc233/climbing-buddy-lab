@@ -1,0 +1,45 @@
+{
+  // 调试配置：F5 启动下拉框里选中的配置。字段说明见 B10《调试与测试指南》
+  // type 必须写 "debugpy"（旧值 "python" 已弃用）；解释器默认用工作区选中的 .venv
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // 调试入口命令，相当于 uv run --env-file .env python -m climbing_buddy_lab
+      // 区别：调试器不会像 uv run 那样先同步 .venv，依赖变了要先手动 uv sync
+      "name": "入口：climbing_buddy_lab",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "climbing_buddy_lab",
+      "cwd": "${workspaceFolder}",
+      // 不写 envFile 时回退到设置项 python.envFile（默认 ${workspaceFolder}/.env）；这里显式写出，便于阅读
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      // 调试全部测试，相当于 uv run pytest；调单个测试时把 args 改成 tests/文件.py::测试名
+      "name": "测试：pytest",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": [
+        "-q"
+      ],
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      // 调试编辑器中当前打开的文件，用于临时脚本（如 scratch/ 下的复现脚本）
+      "name": "当前文件",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}

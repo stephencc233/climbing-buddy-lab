@@ -40,6 +40,18 @@
       "envFile": "${workspaceFolder}/.env",
       "console": "integratedTerminal",
       "justMyCode": true
+    },
+    {
+      // 测试面板里点“调试测试”时使用（purpose: debug-test）；要启动哪个测试由扩展决定，所以不写 module / program
+      // 只能有一个 debug-test 配置：有多个时扩展只用第一个
+      "name": "测试面板调试（debug-test）",
+      "type": "debugpy",
+      "request": "launch",
+      "purpose": ["debug-test"],
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "justMyCode": true
     }
   ]
 }

@@ -11,7 +11,7 @@
 - 这是学习仓库：修改前先说明计划，等我确认后再动手；一次只改一件事，不要顺手重构。
 - 改动走分支 → PR，不直接提交到 main；PR 用 merge commit 合并。
 - 提交前四项检查都要通过：`uv run ruff check`、`uv run ruff format --check`、`uv run pyright`、`uv run pytest`。
-- `git commit` 会触发 pre-commit（`.pre-commit-config.yaml`）；钩子失败时修正后重新提交，不用 `--no-verify` 绕过。
+- `git commit` 会触发 pre-commit（`.pre-commit-config.yaml`）：Ruff 只查暂存的 `.py` 文件，pyright 每次查整个项目，pytest 不在钩子里（靠任务或 CI）。钩子失败时修正后重新提交，不用 `--no-verify` 或 `SKIP=<钩子id>` 绕过。
 - 公开仓库：不读取、不提交 `.env` 和 `data/`，任何文件里都不写密钥。
 
 ## 常用命令

@@ -13,11 +13,8 @@
 - 提交前四项检查都要通过：`uv run ruff check`、`uv run ruff format --check`、`uv run pyright`、`uv run pytest`。
 - `git commit` 会触发 pre-commit（`.pre-commit-config.yaml`）：Ruff 只查暂存的 `.py` 文件，pyright 每次查整个项目，pytest 不在钩子里（靠任务或 CI）。钩子失败时修正后重新提交，不用 `--no-verify` 或 `SKIP=<钩子id>` 绕过。
 - 公开仓库：不读取、不提交 `.env` 和 `data/`，任何文件里都不写密钥。
-
 - 一个 PR 只解决一个 Issue：分支名 `<type>/<Issue 号>-<简述>`（如 `test/14-literal-schema-version`）；PR 描述用模板（`.github/pull_request_template.md`），写 `Closes #N`，合并前按其中的 C3 清单自查。
 - 测试的期望值写字面量（对外约定），不引用被测模块的常量：常量被误改时，引用它的断言会跟着变，测试照样通过。
-
-
 
 ## 常用命令
 

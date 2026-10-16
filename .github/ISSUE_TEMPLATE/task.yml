@@ -1,0 +1,40 @@
+# Issue 表单：工程任务（不改变用户可见行为的工作）
+name: 工程任务
+description: 测试、文档、重构、工具链、CI、依赖等不改变功能的工作
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 类型
+      description: 标题前缀用同一个 Conventional Commits 类型；整理时按此补 type 标签。
+      options:
+        - "test: 测试"
+        - "docs: 文档"
+        - "refactor: 重构（行为不变）"
+        - "chore: 工具、配置、依赖"
+        - "ci: 持续集成"
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 背景与动机
+      description: 为什么要做？不做会怎样？
+    validations:
+      required: true
+  - type: textarea
+    id: todo
+    attributes:
+      label: 要做什么
+      placeholder: |
+        - [ ] …
+        - [ ] …
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: 完成标准
+      description: 怎样判定做完了？写成可检查的结果。
+    validations:
+      required: true

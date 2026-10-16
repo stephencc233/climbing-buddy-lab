@@ -1,0 +1,6 @@
+# 模板选择页配置：关闭空白 Issue（有写权限的维护者仍能看到 “Blank issue”）
+blank_issues_enabled: false
+contact_links:
+  - name: 需求文档与验收标准
+    url: https://github.com/stephencc233/climbing-buddy-lab/blob/main/docs/requirements.md
+    about: 提功能需求前，先看现有范围和 AC 编号。

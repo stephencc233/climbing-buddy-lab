@@ -6,7 +6,7 @@ from typing import Any
 
 import pytest
 
-from climbing_buddy_lab.storage import SCHEMA_VERSION, load_records, save_records
+from climbing_buddy_lab.storage import load_records, save_records
 
 
 @pytest.fixture
@@ -55,7 +55,7 @@ def test_save_writes_schema_version_and_keeps_chinese_readable(
 ) -> None:
     save_records(records_file, sample_records)
     text = records_file.read_text(encoding="utf-8")
-    assert json.loads(text)["schema_version"] == SCHEMA_VERSION
+    assert json.loads(text)["schema_version"] == 1  # 字面量：常量被误改时这里会失败
     assert "指力" in text  # ensure_ascii=False：中文不被转义成 \uXXXX，便于直接查看
 
 

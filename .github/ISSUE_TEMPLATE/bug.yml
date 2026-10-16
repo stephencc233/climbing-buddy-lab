@@ -1,0 +1,62 @@
+# Issue 表单：缺陷报告。文件放在默认分支（main）的 .github/ISSUE_TEMPLATE/ 下才生效
+name: 缺陷报告
+description: 行为与需求文档或预期不符
+title: "fix: "
+labels: ["type: bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        提交前先搜索是否已有相同 Issue。公开仓库：不要粘贴 `.env`、真实训练数据或任何密钥。
+  - type: textarea
+    id: actual
+    attributes:
+      label: 现象
+      description: 实际发生了什么？
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期
+      description: 应该发生什么？依据是什么（需求文档、AC 编号、ADR）？
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. $env:CLIMBING_BUDDY_DATA_FILE = 'data/empty.json'
+        2. uv run climbing-buddy-lab
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 报错或输出（原文）
+      description: 粘贴完整原文，不要转述；会自动按代码块显示。
+      render: text
+  - type: dropdown
+    id: area
+    attributes:
+      label: 涉及哪一层
+      description: 表单不能按选项自动打标签，整理时据此补 area 标签。
+      options:
+        - 入口层 entry
+        - 核心层 core
+        - 存储层 storage
+        - 工具链 tooling（pre-commit、VS Code、CI 等）
+        - 不确定
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: 环境
+      value: |
+        - 系统：Windows 10
+        - Python：3.14
+        - uv：
+        - 提交（git rev-parse --short HEAD）：

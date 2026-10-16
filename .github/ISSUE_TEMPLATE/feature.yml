@@ -1,0 +1,46 @@
+# Issue 表单：功能需求（用户能感知到的新功能或改进）
+name: 功能需求
+description: 新功能或对现有功能的改进
+title: "feat: "
+labels: ["type: feature"]
+body:
+  - type: textarea
+    id: story
+    attributes:
+      label: 用户故事
+      description: 一个 Issue 只写一个故事。
+      placeholder: 作为【角色】，我想要【功能】，以便【价值】。
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 验收标准
+      description: 每条都要能用“是 / 否”判定；合并后会变成测试用例。
+      placeholder: |
+        - 假如 …，当 …，那么 …
+        - 假如 …，当 …，那么 …
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: 不做什么
+      description: 明确排除的内容，防止范围蔓延。没有就写“无”。
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 优先级（MoSCoW）
+      options:
+        - Must
+        - Should
+        - Could
+    validations:
+      required: true
+  - type: input
+    id: refs
+    attributes:
+      label: 相关文档
+      description: docs/requirements.md 的章节或 AC 编号、相关 ADR。
